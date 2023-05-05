@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { useQuill } from 'react-quilljs';
@@ -46,17 +46,28 @@ const Container = styled.div`
 `
 
 const TextEditor = () => {
+  const [mounted, setMounted] = useState(false);
 
-  const { quill, quillRef } = useQuill({theme: 'snow'});
-  console.log(quill)
+  // const { quill, quillRef } = useQuill({theme: 'snow'});
+  // console.log(quill)
+
+  // useEffect(() => {
+  //   if (quill) {
+  //     quill.on('text-change', (delta, oldDelta, source) => {
+  //       console.log(quill.getText()); // Get text only
+  //     });
+  //   }
+  // }, [quill]);
 
   useEffect(() => {
-    if (quill) {
-      quill.on('text-change', (delta, oldDelta, source) => {
-        console.log(quill.getText()); // Get text only
+    if(!mounted) {
+      console.log('first render')
+      const quill = new Quill('#editor', {
+        theme: 'snow'
       });
+      setMounted(true)
     }
-  }, [quill]);
+  }, [ ])
 
   return (
     <>
@@ -67,9 +78,10 @@ const TextEditor = () => {
       </Options>
       <Container>
         {/* <textarea></textarea> */}
-        <div style={{ width: '100%', height: 300 }}>
+        {/* <div style={{ width: '100%', height: 300 }}>
           <div ref={quillRef} />
-        </div>
+        </div> */}
+        <div id="editor"></div>
       </Container>
     </>
   )

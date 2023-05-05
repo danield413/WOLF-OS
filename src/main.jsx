@@ -7,9 +7,7 @@ import { MyContextProvider } from './globalstate/context.jsx'
 ReactDOM.createRoot(document.getElementById('root')).render(
     <MyContextProvider>
         <SnackbarProvider>
-        <React.StrictMode>
           <App />
-        </React.StrictMode>
       </SnackbarProvider>
     </MyContextProvider>
 )
