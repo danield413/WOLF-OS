@@ -10,7 +10,6 @@ const WindowStyle = styled.div`
     background-color: #252525;
     //padding snippet for each side
 
-    border: 1px solid gray;
     border-radius: 10px;
     color: white;
 

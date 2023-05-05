@@ -128,6 +128,24 @@ const Main = styled.main`
     color: #000000;
   }
 
+  .btn-link {
+    margin-top: 20px;
+    text-align: center;
+    display: block;
+    color: #000000;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    font-weight: bold;
+    font-size: .9em;
+    cursor: pointer;
+    padding: 5px;
+  }
+
+  .btn-link:hover {
+    text-decoration: underline;
+  }
+
   form input[type="submit"] {
     margin: 0 auto;
     padding: 2px;
@@ -217,6 +235,7 @@ const LogIn = () => {
 
   //estados para verificar si el usuario esta logeado y para almacenar la hora y mostrarla en el componente alert
   const [login, setLogin] = useState(false);
+  const [changeUser, setChangeUser] = useState(false)
   const [hora, setHora] = useState(new Date().toLocaleTimeString());
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
@@ -252,6 +271,23 @@ const LogIn = () => {
     }
   }
 
+  const handleSubmitCreate = async (e) => {
+    e.preventDefault()
+
+    const { username, password } = e.target.elements;
+    const name = username.value
+    const pass = password.value
+
+    const newUser = {
+        name,
+        password: pass, 
+        id: Date.now()
+    }
+
+    let response = await axios.get('./data/data.json')
+    //TODO: IMPLEMENTAR LOCALSTORAGE O MONGODB PARA GUARDAR LOS USUARIOS
+  }
+
   // funcion que cambia el estado de este componente para mostrar el formulario de login
   const handleLogin = () => {
     setLogin(!login)
@@ -269,7 +305,7 @@ const LogIn = () => {
       <div className="container">
         
         {
-          !login ? (
+          !login && !changeUser && (
 
             <>
               <h1></h1>
@@ -277,7 +313,11 @@ const LogIn = () => {
               <button className="btn" onClick={handleLogin}>Iniciar sesión</button>
             </>
 
-          ) : (
+          ) 
+        } 
+
+        {
+          login && !changeUser &&(
             <>
                <form onSubmit={handleSubmit} autoComplete="off" className="animate__animated animate__fadeIn">
                   <img src="./images/logo.jpg" alt="usuario" />
@@ -285,30 +325,27 @@ const LogIn = () => {
                   <input type="password" name="password" id="password" placeholder="Contraseña" />
                   <input type="submit" value="Iniciar Sesión" />
                 </form>
+                <button className="btn-link" onClick={() =>setChangeUser(!changeUser)}>Crear nuevo usuario</button>
+            </>
+          )
+        }
+
+        {
+          changeUser && (
+            <>
+              <form onSubmit={handleSubmitCreate} autoComplete="off" className="animate__animated animate__fadeIn">
+                  <input type="text" name="username" id="username" placeholder="Usuario" />
+                  <input type="password" name="password" id="password" placeholder="Contraseña" />
+                  <input type="submit" value="Crear usuario" />
+              </form>
+              <button className="btn-link" onClick={() =>setChangeUser(!changeUser)}>Volver</button>
             </>
           )
         }
 
       </div>
       <aside className="barralateral">
-        <button className="btnbarra">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="icon icon-tabler icon-tabler-settings-automation"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            strokeWidth="2"
-            stroke="currentColor"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-            <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"></path>
-            <path d="M10 9v6l5 -3z"></path>
-          </svg>
-        </button>
+        
       </aside>
 
       <h1 className="hora">{hora}</h1>

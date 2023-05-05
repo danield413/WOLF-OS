@@ -125,7 +125,7 @@ const Main = () => {
 
       {
          state.currentApp === 'Archivos' && (
-          <Window title="Administrador de dispositivos">
+          <Window title="Administrador de archivos">
             <Files />
           </Window>
         )
