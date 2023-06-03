@@ -12,6 +12,7 @@ import Images from "./apps/Images"
 import TextEditor from "./apps/TextEditor"
 import CalculatorW from "./apps/CalculatorW"
 import Settings from "./apps/Settings"
+import Audio from "./apps/Audio"
 
 // componente Main 
 // setAuthenticated es una función que cambia el estado de la variable authenticated del componente App
@@ -145,6 +146,14 @@ const Main = () => {
          state.currentApp === 'Archivos' && (
           <Window title="Administrador de archivos">
             <Files />
+          </Window>
+        )
+      }
+
+      {
+        state.currentApp === 'Audio' && (
+          <Window title="Reproductor de audio">
+            <Audio />
           </Window>
         )
       }

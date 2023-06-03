@@ -1,6 +1,6 @@
 import React, { createContext, useReducer } from 'react';
 import {BsFillFileTextFill, BsFillFolderFill, BsFillTerminalFill, BsImageFill} from 'react-icons/bs'
-import {MdGraphicEq} from 'react-icons/md'
+import {MdAudiotrack, MdGraphicEq} from 'react-icons/md'
 import  {AiFillCalculator} from 'react-icons/ai'
 
 const initialState = {
@@ -36,6 +36,11 @@ const initialState = {
       id: 6,
       name: 'Calculadora',
       component: <AiFillCalculator/>
+    },
+    {
+      id: 7,
+      name: 'Audio',
+      component: <MdAudiotrack/>
     }
   ]
 };
