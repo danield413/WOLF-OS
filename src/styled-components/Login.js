@@ -122,6 +122,15 @@ export const Main = styled.main`
     color: #000000;
   }
 
+  form select {
+    background: #ffffff81;
+    width: 60%;
+    height: 40px;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+
   .btn-link {
     margin-top: 20px;
     text-align: center;

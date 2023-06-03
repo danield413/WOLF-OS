@@ -6,6 +6,20 @@ html {
     scroll-behavior: smooth;
 }
 
+.dark-mode {
+    background-color: #333;
+    color: #fff;
+  }
+  
+  .dark-mode .swal-title {
+    color: #fff;
+  }
+  
+  .dark-mode .swal-text {
+    color: #ccc;
+  }
+  
+
 * {
     margin: 0;
     padding: 0;

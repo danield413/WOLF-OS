@@ -50,7 +50,7 @@ const Window = ({title, children}) => {
     const { setCurrentApp } = useAppState()
 
   return (
-    <WindowStyle>
+    <WindowStyle className="animate__animated animate__fadeIn">
         <header>
             {title}
             <button onClick={() => setCurrentApp(null)}><IoMdClose fill='#fff' size={20}/></button>

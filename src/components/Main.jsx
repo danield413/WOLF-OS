@@ -19,10 +19,28 @@ const Main = () => {
 
   // estados para verificar si el usuario esta logeado, el buscador está abierto y para almacenar la hora
   const { logOutUser, state, setCurrentApp } = useAppState()
+  console.log("estado", state)
   const [openMenu, setOpenMenu] = useState(false)
   const [openBuscar, setOpenBuscar] = useState(false)
   const [hora, setHora] = useState(new Date().toLocaleTimeString().split(':').slice(0, 2).join(':'))
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [userApps, setUserApps] = useState(state.apps)
+
+  useEffect(() => {
+
+    if(state.user.rol === 'USER_ROLE') {
+      const nuevasApps = []
+      state.apps.forEach(app => {
+
+        if(app.name !== 'Terminal' && app.name !== 'Recursos') {
+          nuevasApps.push(app)
+        }
+
+      })
+      setUserApps(nuevasApps)
+    }
+
+  }, [state.user])
 
   // useEffect que se ejecuta cada 10 segundos para actualizar la hora en el componente
   useEffect(() => {
@@ -72,7 +90,7 @@ const Main = () => {
         </div>
         <div className="botones">
           <span>{hora}</span>
-          <span>{state.user.name}</span>
+          <span>{state.user.nombre}</span>
           <button onClick={handleSettings}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -132,7 +150,7 @@ const Main = () => {
       }
 
       {
-        state.currentApp === 'Terminal' && (
+        state.currentApp === 'Terminal'&& (
           
           <Window title="Terminal">
             <Terminal />
@@ -175,7 +193,7 @@ const Main = () => {
       
       <div className="barratareas">
         {
-          state.apps.map((app, index) => {
+          userApps && userApps.map((app, index) => {
             return (
               <button key={index} onClick={() => {
                 setCurrentApp(app.name)

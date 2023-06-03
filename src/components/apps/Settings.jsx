@@ -48,7 +48,7 @@ const Settings = () => {
 
   return (
     <Container>
-        <h1>{state.user.name}</h1>
+        <h1>{state.user.nombre}</h1>
         <button>Cambiar contraseña</button>
         <button>Cambiar nombre</button>
     </Container>
