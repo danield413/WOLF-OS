@@ -65,12 +65,11 @@ const LogIn = () => {
 
    try {
       const resp = await axios.post('http://localhost:8080/api/usuarios/', { nombre:name, password: pass, rol: rolUsuario })
-      console.log(resp.data)
 
-      if(resp.data.msg === 'ok') {
+      if(resp.data) {
         e.target.reset()
-        enqueueSnackbar('Usuario logueado correctamente', { variant: 'success' })
-      }       
+        enqueueSnackbar('Usuario creado correctamente', { variant: 'success' })
+      }
 
    } catch (error) {
       if(error) {

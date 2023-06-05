@@ -213,6 +213,7 @@ const Files = () => {
       <Grid>
         {
           (files && files.length > 0) && files.map((item, index) => {
+              console.log(item)
               return (
                 <Item key={index} type={item.esCarpeta}>
                     {item.esCarpeta ?

@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useAppState } from '../../hooks/useAppState'
 
 const Container = styled.div`
   color: #ffffff;
@@ -39,16 +40,50 @@ const Container = styled.div`
 
 const Terminal = () => {
 
+  const { logOutUser } = useAppState()
+
+  const terminalRef = React.useRef(null)
+
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(e.target.terminal.value)
+    let txt = e.target.elements.terminal.value
+    console.log(txt)
+    //si el comando es clear, limpiamos la terminal
+    if(txt === 'clear') {
+      terminalRef.current.value = ''
+    }
+    if(txt === 'logout') {
+      logOutUser()
+    }
+    if(txt === 'hora') {
+      terminalRef.current.value += new Date().toLocaleTimeString().split(':').slice(0, 2).join(':') + '\n'
+    }
+    if(txt === 'fecha') {
+      terminalRef.current.value += new Date().toLocaleDateString() + '\n'
+    }
+    if(txt === 'usuario') {
+      terminalRef.current.value += 'Usuario: ' + JSON.parse(localStorage.getItem('usuario')).nombre + '\n'
+    }
+    if(txt === 'rol') {
+      terminalRef.current.value += 'Rol: ' + JSON.parse(localStorage.getItem('usuario')).rol + '\n'
+    }
+    if(txt === 'help') {
+      terminalRef.current.value += 'Comandos disponibles: \n' +
+      'clear: Limpiar la terminal \n' +
+      'logout: Cerrar sesión \n' +
+      'hora: Muestra la hora actual \n' +
+      'fecha: Muestra la fecha actual \n' +
+      'usuario: Muestra el nombre del usuario \n' +
+      'rol: Muestra el rol del usuario \n' +
+      'help: Muestra esta lista de comandos \n'
+    }
   }
 
   return (
     <Container>
-      <form onSubmit={handleSubmit}>
-        <input type="submit" value="Ejecutar" />
-        <textarea name="terminal" placeholder='Tu comando acá'></textarea>
+      <form onSubmit={handleSubmit} >
+        <input type="submit" value="Ejecutar"/>
+        <textarea name="terminal" placeholder='Tu comando acá' ref={terminalRef}></textarea>
       </form>
     </Container>
   )
