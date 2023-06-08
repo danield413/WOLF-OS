@@ -56,19 +56,19 @@ const Terminal = () => {
       logOutUser()
     }
     if(txt === 'hora') {
-      terminalRef.current.value += new Date().toLocaleTimeString().split(':').slice(0, 2).join(':') + '\n'
+      terminalRef.current.value = new Date().toLocaleTimeString().split(':').slice(0, 2).join(':') + '\n'
     }
     if(txt === 'fecha') {
-      terminalRef.current.value += new Date().toLocaleDateString() + '\n'
+      terminalRef.current.value = new Date().toLocaleDateString() + '\n'
     }
     if(txt === 'usuario') {
-      terminalRef.current.value += 'Usuario: ' + JSON.parse(localStorage.getItem('usuario')).nombre + '\n'
+      terminalRef.current.value = 'Usuario: ' + JSON.parse(localStorage.getItem('usuario')).nombre + '\n'
     }
     if(txt === 'rol') {
-      terminalRef.current.value += 'Rol: ' + JSON.parse(localStorage.getItem('usuario')).rol + '\n'
+      terminalRef.current.value = 'Rol: ' + JSON.parse(localStorage.getItem('usuario')).rol + '\n'
     }
     if(txt === 'help') {
-      terminalRef.current.value += 'Comandos disponibles: \n' +
+      terminalRef.current.value = 'Comandos disponibles: \n' +
       'clear: Limpiar la terminal \n' +
       'logout: Cerrar sesión \n' +
       'hora: Muestra la hora actual \n' +
