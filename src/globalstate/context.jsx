@@ -23,11 +23,6 @@ const initialState = {
       component: <MdGraphicEq/>
     },
     {
-      id: 4,
-      name: 'Texto',
-      component: <BsFillFileTextFill/>
-    },
-    {
       id: 5,
       name: 'Visor imágenes',
       component: <BsImageFill/>

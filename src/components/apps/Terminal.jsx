@@ -40,7 +40,7 @@ const Container = styled.div`
 
 const Terminal = () => {
 
-  const { logOutUser } = useAppState()
+  const { logOutUser, state } = useAppState()
 
   const terminalRef = React.useRef(null)
 
@@ -62,10 +62,10 @@ const Terminal = () => {
       terminalRef.current.value = new Date().toLocaleDateString() + '\n'
     }
     if(txt === 'usuario') {
-      terminalRef.current.value = 'Usuario: ' + JSON.parse(localStorage.getItem('usuario')).nombre + '\n'
+      terminalRef.current.value = 'Usuario: ' + state.user.nombre + '\n'
     }
     if(txt === 'rol') {
-      terminalRef.current.value = 'Rol: ' + JSON.parse(localStorage.getItem('usuario')).rol + '\n'
+      terminalRef.current.value = 'Rol: ' + state.user.rol + '\n'
     }
     if(txt === 'help') {
       terminalRef.current.value = 'Comandos disponibles: \n' +

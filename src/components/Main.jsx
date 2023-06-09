@@ -26,6 +26,7 @@ const Main = () => {
   const [hora, setHora] = useState(new Date().toLocaleTimeString().split(':').slice(0, 2).join(':'))
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [userApps, setUserApps] = useState(state.apps)
+  const [fileSelected, setFileSelected] = useState(null)
 
   useEffect(() => {
 
@@ -136,7 +137,7 @@ const Main = () => {
 
       {
         state.currentApp === 'Recursos' && (
-          <Window title="Administrador de recursos de hardware">
+          <Window title="Administrador de recursos de hardware" callback={() => setCurrentApp(null)}>
             <Resources />
          </Window>
         )
@@ -144,15 +145,15 @@ const Main = () => {
 
       {
          state.currentApp === 'Archivos' && (
-          <Window title="Administrador de archivos">
-            <Files />
+          <Window title="Administrador de archivos" callback={() => setCurrentApp(null)}>
+            <Files setFileSelected={setFileSelected}/>
           </Window>
         )
       }
 
       {
         state.currentApp === 'Audio' && (
-          <Window title="Reproductor de audio">
+          <Window title="Reproductor de audio" callback={() => setCurrentApp(null)}>
             <Audio />
           </Window>
         )
@@ -161,7 +162,7 @@ const Main = () => {
       {
         state.currentApp === 'Terminal'&& (
           
-          <Window title="Terminal">
+          <Window title="Terminal" callback={() => setCurrentApp(null)}>
             <Terminal />
           </Window>
         
@@ -169,16 +170,8 @@ const Main = () => {
       }
 
       {
-        state.currentApp === 'Texto' && (
-          <Window title="Editor de texto">
-            <TextEditor />
-          </Window>
-        )
-      }
-
-      {
         state.currentApp === 'Visor imágenes' && (
-          <Window title="Visor imágenes">
+          <Window title="Visor imágenes" callback={() => setCurrentApp(null)}>
             <Images/>
           </Window>
         )
@@ -186,7 +179,7 @@ const Main = () => {
 
       {
         state.currentApp === 'Calculadora' && (
-          <Window title="Calculadora">
+          <Window title="Calculadora" callback={() => setCurrentApp(null)}>
             <CalculatorW />
           </Window>
         )
@@ -194,10 +187,18 @@ const Main = () => {
 
       {
         state.currentApp === 'Configuración' && (
-          <Window title="Configuración">
+          <Window title="Configuración" callback={() => setCurrentApp(null)}>
             <Settings />
           </Window>
         )
+      }
+
+      {
+          (fileSelected && (
+            <Window title="Editor de texto" callback={() => setFileSelected(null)}>
+              <TextEditor item={fileSelected}/>
+            </Window>
+          ))
       }
       
       <div className="barratareas">

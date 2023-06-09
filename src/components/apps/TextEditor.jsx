@@ -6,6 +6,8 @@ import 'quill/dist/quill.snow.css';
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import { useAppState } from '../../hooks/useAppState'
+import jsPDF from 'jspdf';
+
 
 const Options = styled.div`
   display: flex;
@@ -48,9 +50,10 @@ const Container = styled.div`
   }
 `
 
-const TextEditor = () => {
+const TextEditor = ({item = null}) => {
+  console.log(item)
   const [mounted, setMounted] = useState(false);
-  const { state } = useAppState();
+  const { state, setCurrentApp } = useAppState();
 
   useEffect(() => {
     if(!mounted) {
@@ -60,7 +63,19 @@ const TextEditor = () => {
       });
       setMounted(true)
     }
+    document.querySelector('.ql-editor').innerHTML = item.informacion
   }, [ ])
+
+  const generatePDF = () => {
+    const doc = new jsPDF();
+    const html = document.querySelector('.ql-editor').innerHTML
+    const text = html.replace('<p>', '').replace('</p>', '')
+    
+    doc.text(text, 10, 10); // Añade el texto al documento PDF
+  
+    doc.save('ejemplo.pdf'); // Descarga el archivo PDF con el nombre 'ejemplo.pdf'
+  };
+  
 
   const handleImpresion = () => {
     Swal.fire({
@@ -71,6 +86,7 @@ const TextEditor = () => {
         Swal.showLoading()
         setTimeout(() => {
 
+          generatePDF();
           Swal.fire({
             title: 'Archivo impreso',
             text: 'El archivo se ha impreso correctamente',
@@ -78,94 +94,56 @@ const TextEditor = () => {
             confirmButtonText: 'Aceptar'
           })
 
-        }, 3000)
+        }, 1000 )
       }
     })
   }
 
   const handleSave = () => {
+
     const html = document.querySelector('.ql-editor').innerHTML
     const text = html.replace('<p>', '').replace('</p>', '')
     console.log(text)
 
-    if(text === "<br>"){
-      Swal.fire({
-        title: 'Error',
-        text: 'No puedes guardar un archivo vacio',
-        icon: 'error',
-        confirmButtonText: 'Aceptar'
-      })
-      return
-    }
-
-    Swal.fire({
-      title: 'Guardar archivo de texto',
-      html: `<input type="text" id="nombre" class="swal2-input" placeholder="Nombre">
-      <input type="text" id="extension" class="swal2-input" placeholder="Extension" value="docx" disabled>
-      `,
-      confirmButtonText: 'Crear nueva carpeta',
-      focusConfirm: false,
-      customClass: 'dark-mode',
-      preConfirm: () => {
-        const nombre = Swal.getPopup().querySelector('#nombre').value
-        const extension = Swal.getPopup().querySelector('#extension').value
-        if (!nombre || !extension) {
-          Swal.showValidationMessage(`Ingresa el nombre y extensión de tu archivo`)
-        }
-        return { nombre, extension }
-      }
-    }).then( async (result) => {
-      const fechaActual = new Date().getDate() + '/' + (new Date().getMonth() + 1) + '/' + new Date().getFullYear()
-      const nombre = result.value.nombre
-      const extension = result.value.extension
-      const informacion = text
-      const peso = Math.random() * (100 - 1) + 1
-      const esCarpeta = false
-      const usuario = state.user.uid
     
-      try {
+    Swal.fire({
+      title: 'Guardando',
+      html: 'Estamos guardando tu archivo, espera un momento',
+      timerProgressBar: true,
+      didOpen: () => {
 
-        const response = await axios.post('http://localhost:8080/api/usuarios/files', { 
-          nombre,
-          informacion,
-          extension,
-          peso,
-          esCarpeta,
-          fecha: fechaActual,
-          usuario
-        })
-
-        console.log(response)
-
-        if(response.status === 200) {
-          Swal.fire({
-            title: 'Archivo creado',
-            text: 'La carpeta se ha creado correctamente',
-            icon: 'success',
-            confirmButtonText: 'Aceptar'
+        Swal.showLoading()
+        setTimeout(() => {
+          axios.put(`http://localhost:8080/api/usuarios/files/${item.uid}`, {
+            informacion: text
           })
+          .then(function (response) {
+            console.log(response)
+            Swal.fire({
+              title: 'Archivo guardado',
+              text: 'El archivo se ha guardado correctamente',
+              icon: 'success',
+              confirmButtonText: 'Aceptar'
+            })
 
-        } else {
-          Swal.fire({
-            title: 'Error',
-            text: 'Ocurrio un error al crear la el archivo',
-            icon: 'error',
-            confirmButtonText: 'Aceptar'
+            setCurrentApp(null)
+
           })
-        }
+          .catch(function (error) {
+            console.log(error);
+          });
+        }, 1000 )
 
-
-      } catch(error) {
-        console.log(error)
       }
-    })
 
+    })
   }
+
 
   return (
     <>
       <Options>
-        <button onClick={handleSave}>Guardar como</button>
+        <button onClick={handleSave}>Guardar</button>
         <button onClick={handleImpresion}>Imprimir</button>
       </Options>
       <Container>

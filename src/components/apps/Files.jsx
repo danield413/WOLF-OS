@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import { useAppState } from '../../hooks/useAppState'
 import Swal from 'sweetalert2'
 import { AiFillEdit } from 'react-icons/ai'
+import TextEditor from './TextEditor'
+import Window from '../Window'
 
 const Menu = styled.div` 
   display: flex;
@@ -58,7 +60,7 @@ const Item = styled.div`
   }
 `
 
-const Files = () => {
+const Files = ({ setFileSelected }) => {
 
   const [files, setFiles] = useState([])
   const { state } = useAppState()
@@ -218,79 +220,81 @@ const Files = () => {
   }
 
   const handleEdit = (item) => {
+    console.log("item", item)
     const { uid , nombre } = item
     
     //sweet alert form to change the name of the file
-    Swal.fire({
-      title: 'Editar archivo',
-      html: `<input type="text" id="nombre" class="swal2-input" placeholder="Nombre" value="${nombre}">
-      `,
-      confirmButtonText: 'Editar archivo',
-      focusConfirm: false,
-      customClass: 'dark-mode',
-      preConfirm: () => {
-        const nombre = Swal.getPopup().querySelector('#nombre').value
-        if (!nombre) {
-          Swal.showValidationMessage(`Ingresa el nombre de tu archivo`)
-        }
-        return { nombre }
-      }
-    }).then( async (result) => {
-      const nombre = result.value.nombre
+    // Swal.fire({
+    //   title: 'Editar archivo',
+    //   html: `<input type="text" id="nombre" class="swal2-input" placeholder="Nombre" value="${nombre}">
+    //   `,
+    //   confirmButtonText: 'Editar archivo',
+    //   focusConfirm: false,
+    //   customClass: 'dark-mode',
+    //   preConfirm: () => {
+    //     const nombre = Swal.getPopup().querySelector('#nombre').value
+    //     if (!nombre) {
+    //       Swal.showValidationMessage(`Ingresa el nombre de tu archivo`)
+    //     }
+    //     return { nombre }
+    //   }
+    // }).then( async (result) => {
+    //   const nombre = result.value.nombre
       
-      try {
+    //   try {
 
 
-        const response = await axios.put(`http://localhost:8080/api/usuarios/files/${uid}`, {
-          nombre
-        })
+    //     const response = await axios.put(`http://localhost:8080/api/usuarios/files/${uid}`, {
+    //       nombre
+    //     })
 
-        console.log(response)
+    //     console.log(response)
 
-        if(response.status === 200) {
-          Swal.fire({
-            title: 'Archivo editado',
-            text: 'El archivo se ha editado correctamente',
-            icon: 'success',
-            confirmButtonText: 'Aceptar'
-          })
+    //     if(response.status === 200) {
+    //       Swal.fire({
+    //         title: 'Archivo editado',
+    //         text: 'El archivo se ha editado correctamente',
+    //         icon: 'success',
+    //         confirmButtonText: 'Aceptar'
+    //       })
 
-          //edit file to state
-          const newFiles = files.map((item) => {
-            if(item.uid === uid) {
-              item.nombre = nombre
-            }
-            return item
-          })
-          setFiles(newFiles)
-          console.log(files)
+    //       //edit file to state
+    //       const newFiles = files.map((item) => {
+    //         if(item.uid === uid) {
+    //           item.nombre = nombre
+    //         }
+    //         return item
+    //       })
+    //       setFiles(newFiles)
+    //       console.log(files)
 
-        } else {
-          Swal.fire({
-            title: 'Error',
-            text: 'Ocurrio un error al editar el archivo',
-            icon: 'error',
-            confirmButtonText: 'Aceptar'
-          })
-        }
+    //     } else {
+    //       Swal.fire({
+    //         title: 'Error',
+    //         text: 'Ocurrio un error al editar el archivo',
+    //         icon: 'error',
+    //         confirmButtonText: 'Aceptar'
+    //       })
+    //     }
 
-      } catch(error) {
-        Swal.fire({
-          title: 'Error',
-          text: 'Ocurrio un error al editar el archivo',
-          icon: 'error',
-          confirmButtonText: 'Aceptar'
-        })
-        console.log(error)
-      }
+    //   } catch(error) {
+    //     Swal.fire({
+    //       title: 'Error',
+    //       text: 'Ocurrio un error al editar el archivo',
+    //       icon: 'error',
+    //       confirmButtonText: 'Aceptar'
+    //     })
+    //     console.log(error)
+    //   }
 
-    })
+    // })
 
   }
 
 
   return (
     <>
+
       <Menu>
         <button onClick={handleCreateFolder}>Nueva carpeta</button>
         <button onClick={handleCreateFile}>Nuevo archivo</button>
@@ -298,7 +302,6 @@ const Files = () => {
       <Grid>
         {
           (files && files.length > 0) && files.map((item, index) => {
-              console.log(item)
               return (
                 <Item key={index} type={item.esCarpeta}>
                     {item.esCarpeta ?
@@ -307,7 +310,7 @@ const Files = () => {
                       <>
                         <p>{item.nombre}.{item.extension}</p>
                         <button
-                          onClick={() => handleEdit(item)}
+                          onClick={() => setFileSelected(item)}
                         ><AiFillEdit fill='#00FFB5'/></button>
                       </>
                     }

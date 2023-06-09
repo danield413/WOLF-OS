@@ -115,7 +115,7 @@ const LogIn = () => {
               <form onSubmit={handleSubmit} autoComplete="off" className="animate__animated animate__fadeIn">
                 <img src="./images/logo.jpg" alt="usuario" />
                 <input type="text" name="username" id="username" placeholder="Usuario" />
-                <input type="password" name="password" id="password" placeholder="Contraseña" />
+                <input type="password" name="password" id="password" placeholder="Contraseña"/>
                 <input type="submit" value="Iniciar Sesión" />
               </form>
               <button className="btn-link" onClick={() => setChangeUser(!changeUser)}>Crear nuevo usuario</button>

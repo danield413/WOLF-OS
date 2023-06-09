@@ -45,7 +45,7 @@ const WindowStyle = styled.div`
     }
 `
 
-const Window = ({title, children}) => {
+const Window = ({title, children, callback}) => {
 
     const { setCurrentApp } = useAppState()
 
@@ -53,7 +53,7 @@ const Window = ({title, children}) => {
     <WindowStyle className="animate__animated animate__fadeIn">
         <header>
             {title}
-            <button onClick={() => setCurrentApp(null)}><IoMdClose fill='#fff' size={20}/></button>
+            <button onClick={callback}><IoMdClose fill='#fff' size={20}/></button>
         </header>
         <main>
             {children}
